@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/thereisnoplanb/date"
+	"github.com/thereisnoplanb/dateOnly"
 )
 
 func main() {
-	a := date.Date{}
+	a := dateOnly.Date{}
 	_ = a
 
 	b := time.Time{}
 	_ = b
 
-	c := date.Date{}
+	c := dateOnly.Date{}
 	_ = c
 
 	jsond := `{
@@ -26,10 +26,10 @@ func main() {
 	}`
 
 	type testowe struct {
-		Date1 *date.Date `json:"date1"`
-		Date2 date.Date  `json:"date2"`
-		Time1 *time.Time `json:"time1"`
-		Time2 time.Time  `json:"time2"`
+		Date1 *dateOnly.Date `json:"date1"`
+		Date2 dateOnly.Date  `json:"date2"`
+		Time1 *time.Time     `json:"time1"`
+		Time2 time.Time      `json:"time2"`
 	}
 
 	t := new(testowe)
@@ -37,7 +37,7 @@ func main() {
 	err := json.Unmarshal([]byte(jsond), t)
 	_ = err
 
-	bytes, err := json.Marshal(t)
+	bytes, _ := json.Marshal(t)
 
 	aa := string(bytes)
 	_ = aa

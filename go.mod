@@ -1,3 +1,3 @@
-module github.com/thereisnoplanb/date
+module github.com/thereisnoplanb/dateOnly
 
 go 1.24.0
