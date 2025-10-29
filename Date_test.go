@@ -1,4 +1,4 @@
-package dateOnly
+package date
 
 import (
 	"fmt"

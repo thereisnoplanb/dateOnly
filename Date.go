@@ -1,4 +1,4 @@
-package dateOnly
+package date
 
 import (
 	"database/sql/driver"
@@ -551,7 +551,7 @@ func (date Date) YearDay() int {
 //
 //	day int
 //
-// The day (1 througthe number of days in month).
+// The day (1 through the number of days in month).
 //
 // # Returns
 //
@@ -684,4 +684,22 @@ func (date *Date) Scan(value any) (err error) {
 	default:
 		return fmt.Errorf("Date.Scan: unsupported type %T", value)
 	}
+}
+
+// Returns a date that is set to the date part of the specified time.
+//
+// # Parameters
+//
+//	time time.Time
+//
+// The time.Time instance.
+//
+// # Returns
+//
+//	date Date
+//
+// The Date instance composed of the date part of the specified input time time.Time instance.
+func DateOf(time time.Time) (date Date) {
+	year, month, day := time.Date()
+	return New(year, month, day)
 }
