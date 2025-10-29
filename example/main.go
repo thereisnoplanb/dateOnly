@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	date "github.com/thereisnoplanb/dateOnly"
+	date "github.com/thereisnoplanb/date"
 )
 
 func main() {
