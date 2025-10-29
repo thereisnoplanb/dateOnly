@@ -1,6 +1,7 @@
 package dateOnly
 
 import (
+	"database/sql/driver"
 	"errors"
 	"fmt"
 	"time"
@@ -630,4 +631,57 @@ func Since(value time.Time) time.Duration {
 // It is shorthand for value.Sub(date.Today()).
 func Until(value time.Time) time.Duration {
 	return value.Sub(time.Time(Today()))
+}
+
+// Implements the [database/sql/driver.Valuer] interface.
+//
+// # Returns
+//
+//	value driver.Value
+//
+// The date as a string in the YYYY-MM-DD format.
+//
+//	err error
+//
+// nil value.
+func (date Date) Value() (value driver.Value, err error) {
+	return date.Format(time.DateOnly), nil
+}
+
+// Implements the [database/sql.Scanner] interface.
+//
+// # Parameters
+//
+//	value any
+//
+// Value from database to scan.
+//
+// # Returns
+//
+//	err error
+//
+// Database scan error.
+func (date *Date) Scan(value any) (err error) {
+	switch v := value.(type) {
+	case time.Time:
+		year, month, day := v.Date()
+		*date = New(year, month, day)
+		return nil
+	case string:
+		parsed, err := Parse(time.DateOnly, v)
+		if err != nil {
+			return fmt.Errorf("Date.Scan: cannot parse string %q: %w", v, err)
+		}
+		*date = parsed
+		return nil
+	case []byte:
+		parsed, err := Parse("2006-01-02", string(v))
+		if err != nil {
+			return fmt.Errorf("Date.Scan: cannot parse bytes %q: %w", v, err)
+		}
+		*date = parsed
+		return nil
+	default:
+		return fmt.Errorf("Date.Scan: unsupported type %T", value)
+	}
 }
